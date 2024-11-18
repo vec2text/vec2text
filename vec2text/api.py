@@ -82,13 +82,14 @@ def invert_embeddings(
     corrector: vec2text.trainers.Corrector,
     num_steps: int = None,
     sequence_beam_width: int = 0,
+    max_length: int = 128,
 ) -> List[str]:
     corrector.inversion_trainer.model.eval()
     corrector.model.eval()
 
     gen_kwargs = copy.copy(corrector.gen_kwargs)
     gen_kwargs["min_length"] = 1
-    gen_kwargs["max_length"] = 128
+    gen_kwargs["max_length"] = max_length
 
     if num_steps is None:
         assert (
