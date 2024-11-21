@@ -28,7 +28,7 @@ from utils import emb, embed_all_tokens
 
 num_workers = len(os.sched_getaffinity(0))
 max_seq_length = 128
-device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+from vec2text.models.model_utils import device
 
 
 def reorder_words_except_padding(

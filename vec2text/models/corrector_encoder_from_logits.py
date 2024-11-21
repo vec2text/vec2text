@@ -7,6 +7,7 @@ import transformers
 from vec2text.models.config import InversionConfig
 
 from .corrector_encoder import CorrectorEncoderModel
+from vec2text.models.model_utils import device
 
 
 class CorrectorEncoderFromLogitsModel(CorrectorEncoderModel):
