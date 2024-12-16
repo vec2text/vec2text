@@ -19,6 +19,7 @@ EMBEDDER_MODEL_NAMES = [
     "ance_tele",
     "dpr_st",
     "gtr_base_st",
+    "gte_base_st",
     "paraphrase-distilroberta",
     "sentence-transformers/all-MiniLM-L6-v2",
     "meta-llama/Llama-2-7b-hf",
@@ -173,6 +174,9 @@ def load_embedder_and_tokenizer(name: str, torch_dtype: str, **kwargs):
         tokenizer = transformers.AutoTokenizer.from_pretrained(
             "thenlper/gte-base"
         )
+    elif name == "gte_base_st":
+        model = SentenceTransformer('thenlper/gte-base')
+        tokenizer = model.tokenizer
     elif name == "ance_tele":
         model = transformers.AutoModel.from_pretrained(
             "OpenMatch/ance-tele_nq_psg-encoder", **model_kwargs
