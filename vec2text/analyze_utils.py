@@ -16,14 +16,8 @@ from vec2text import experiments
 from vec2text.models.config import InversionConfig
 from vec2text.run_args import DataArguments, ModelArguments, TrainingArguments
 from vec2text import run_args as run_args
+from vec2text.models.model_utils import device
 
-device = torch.device(
-    "cuda"
-    if torch.cuda.is_available()
-    else "mps"
-    if torch.backends.mps.is_available()
-    else "cpu"
-)
 transformers.logging.set_verbosity_error()
 
 #############################################################################

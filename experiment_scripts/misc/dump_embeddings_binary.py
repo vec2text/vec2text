@@ -14,8 +14,7 @@ import torch
 import tqdm
 import transformers
 from data_helpers import NQ_DEV, load_dpr_corpus
-
-device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+from vec2text.models.model_utils import device
 
 
 def entropy__bits(p: float) -> float:
