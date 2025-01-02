@@ -282,7 +282,8 @@ class TrainingArguments(transformers.TrainingArguments):
             "required": False,
             "help": "Which experiment to run (defines model, loss func, dataset...) ",
             "choices": [
-                "inversion",  # our model: projects and feeds to encoder-decoder
+                "inversion",
+                "inversion_unet",
                 "inversion_from_logits",
                 "inversion_from_logits_emb",
                 "inversion_decoder_only",  # baseline: use single embedding as input to a decoder

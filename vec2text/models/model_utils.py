@@ -22,6 +22,7 @@ EMBEDDER_MODEL_NAMES = [
     "gte_base_st",
     "paraphrase-distilroberta",
     "sentence-transformers/all-MiniLM-L6-v2",
+    "sentence-transformers/all-MiniLM-L12-v2",
     "meta-llama/Llama-2-7b-hf",
     "meta-llama/Llama-2-13b-hf",
     "meta-llama/Llama-2-7b-chat-hf",

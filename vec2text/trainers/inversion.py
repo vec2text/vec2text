@@ -21,7 +21,7 @@ class InversionTrainer(BaseTrainer):
         return self.model.generate(inputs=inputs, generation_kwargs=generation_kwargs)
 
     def training_step(
-        self, model: nn.Module, inputs: Dict[str, torch.Tensor]
+        self, model: nn.Module, inputs: Dict[str, torch.Tensor], num_items_in_batch=None
     ) -> torch.Tensor:
         """
         Performs a training step. we override to compute data-specific metrics.
