@@ -48,7 +48,7 @@ class ModelArguments:
         default="gtr_base",
         metadata={
             "help": "Model to get embeddings from (locally)",
-            "choices": EMBEDDER_MODEL_NAMES,
+            # "choices": EMBEDDER_MODEL_NAMES,
         },
     )
     embedder_model_api: Optional[str] = field(

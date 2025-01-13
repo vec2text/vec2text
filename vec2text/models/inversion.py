@@ -86,7 +86,14 @@ class InversionModel(transformers.PreTrainedModel):
             self.embedder_dim = embedder.get_sentence_embedding_dimension()
             bottleneck_dim = self.embedder_dim
         else:
-            self.embedder_dim = embedder.config.hidden_size
+            if hasattr(embedder.config, "text_config"):
+                self.embedder_dim = embedder.config.text_config.hidden_size
+            elif hasattr(embedder.config, "hidden_size"):
+                self.embedder_dim = embedder.config.hidden_size
+            else:
+                raise ValueError(
+                    f"could not determine hidden size for embedder {embedder} of type {type(embedder)}"
+                )
             bottleneck_dim = self.embedder_dim
         self.embedder_no_grad = embedder_no_grad
         self.use_frozen_embeddings_as_input = use_frozen_embeddings_as_input
