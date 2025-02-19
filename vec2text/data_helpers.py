@@ -26,6 +26,8 @@ def load_msmarco_corpus() -> datasets.Dataset:
     dataset_dict = datasets.load_dataset("Tevatron/msmarco-passage-corpus")
     return dataset_dict["train"]
 
+def load_wikitext_2() -> datasets.Dataset:
+    return datasets.load_dataset("mikasenghaas/wikitext-2 ")
 
 def create_omi_ex(ex: Dict[str, str]) -> Dict[str, str]:
     ex["text"] = ex["user"]
@@ -92,6 +94,9 @@ def dataset_from_args(data_args: DataArguments) -> datasets.DatasetDict:
         raw_datasets = load_msmarco_corpus()
         raw_datasets = raw_datasets.train_test_split(test_size=0.01)
         raw_datasets["validation"] = raw_datasets["test"]
+    elif data_args.dataset_name == "wikitext_2":
+        raw_datasets = load_wikitext_2()
+        raw_datasets["validation"] = raw_datasets["validation"]
     elif data_args.dataset_name == "one_million_instructions":
         raw_datasets = load_one_million_instructions()
         raw_datasets = raw_datasets.train_test_split(test_size=0.01)
