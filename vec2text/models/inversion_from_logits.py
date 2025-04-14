@@ -77,17 +77,11 @@ class InversionFromLogitsModel(InversionModel):
     ) -> torch.Tensor:
         embedder = self.embedder
 
-        inputs_str = self.tokenizer.batch_decode(input_ids, skip_special_tokens=True)
-        emb_input_ids = self.embedder_tokenizer(
-            inputs_str,
-            max_length=self.config.max_seq_length,
-            truncation=True,
-            padding="max_length",
-            return_tensors="pt",
-        ).to(next(self.parameters()).device)
-
-        model_output = embedder(**emb_input_ids)
-        return self._process_embedder_output(model_output, emb_input_ids.attention_mask)
+        model_output = embedder(
+            input_ids=input_ids,
+            attention_mask=attention_mask,
+        )
+        return self._process_embedder_output(model_output, attention_mask)
 
     def embed_and_project(
         self,
@@ -98,17 +92,29 @@ class InversionFromLogitsModel(InversionModel):
         if frozen_embeddings is not None:
             embeddings = frozen_embeddings
             assert len(embeddings.shape) == 2  # batch by d
-        elif self.embedder_no_grad:
-            with torch.no_grad():
-                embeddings = self.call_embedding_model(
-                    input_ids=input_ids,
-                    attention_mask=attention_mask,
-                )
         else:
-            embeddings = self.call_embedding_model(
-                input_ids=input_ids,
-                attention_mask=attention_mask,
+            inputs_str = self.tokenizer.batch_decode(
+                input_ids, skip_special_tokens=True
             )
+            emb_input_ids = self.embedder_tokenizer(
+                inputs_str,
+                max_length=self.config.max_seq_length,
+                truncation=True,
+                padding="max_length",
+                return_tensors="pt",
+            ).to(next(self.parameters()).device)
+
+            if self.embedder_no_grad:
+                with torch.no_grad():
+                    embeddings = self.call_embedding_model(
+                        input_ids=emb_input_ids.input_ids,
+                        attention_mask=emb_input_ids.attention_mask,
+                    )
+            else:
+                embeddings = self.call_embedding_model(
+                    input_ids=emb_input_ids.input_ids,
+                    attention_mask=emb_input_ids.attention_mask,
+                )
 
         embeddings = embeddings.to(self.sequence_weights.dtype)
 
@@ -190,7 +196,8 @@ class InversionFromLogitsModel(InversionModel):
         inputs: Dict[str, torch.Tensor],
         generation_kwargs: Dict[str, torch.Tensor],
     ) -> torch.Tensor:
-        generation_kwargs = copy.copy(generation_kwargs)  # make a copy so we can edit
+        # make a copy so we can edit
+        generation_kwargs = copy.copy(generation_kwargs)
         inputs_embeds, attention_mask = self.embed_and_project(
             input_ids=inputs.get("input_ids"),
             attention_mask=inputs.get("attention_mask"),
