@@ -2,8 +2,7 @@
 
 <img src="https://github.com/jxmorris12/vec2text-gif/blob/master/vec2text_v3.gif" width="500" />
 
-This library contains code for doing text embedding inversion. We can train various architectures that reconstruct text sequences from embeddings as well as run pre-trained models. This repository contains code for the paper "Text Embeddings Reveal (Almost)
-As Much As Text".
+This library contains code for doing text embedding inversion. We can train various architectures that reconstruct text sequences from embeddings as well as run pre-trained models. This repository contains code for the papers "Text Embeddings Reveal (Almost) As Much As Text" and "Language Model Inversion".
 
 To get started, install this on PyPI:
 
