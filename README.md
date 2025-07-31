@@ -229,13 +229,56 @@ Steps 2 and 3 happen together by simply executing the training script. Our code 
 
 Here's how you might train the zero-step model for GTR:
 ```bash
-python run.py --per_device_train_batch_size 128 --per_device_eval_batch_size 128 --max_seq_length 128 --model_name_or_path t5-base --dataset_name msmarco --embedder_model_name gtr_base --num_repeat_tokens 16 --embedder_no_grad True --num_train_epochs 100 --max_eval_samples 500 --eval_steps 20000 --warmup_steps 10000 --bf16=1 --use_wandb=1 --use_frozen_embeddings_as_input True --experiment inversion --lr_scheduler_type constant_with_warmup --exp_group_name oct-gtr --learning_rate 0.001 --output_dir ./saves/gtr-1 --save_steps 2000
+python run.py \
+  --per_device_train_batch_size 128 \
+  --per_device_eval_batch_size 128 \
+  --max_seq_length 128 \
+  --model_name_or_path t5-base \
+  --dataset_name msmarco \
+  --embedder_model_name gtr_base \
+  --num_repeat_tokens 16 \
+  --embedder_no_grad True \
+  --num_train_epochs 100 \
+  --max_eval_samples 500 \
+  --eval_steps 20000 \
+  --warmup_steps 10000 \
+  --bf16=1 \
+  --use_wandb=1 \
+  --use_frozen_embeddings_as_input True \
+  --experiment inversion \
+  --lr_scheduler_type constant_with_warmup \
+  --exp_group_name oct-gtr \
+  --learning_rate 0.001 \
+  --output_dir ./saves/gtr-1 \
+  --save_steps 2000
 ```
 
 Note that there are a lot of options to change things about the data and model architecture. If you want to train the small GTR inverter from the paper, this command will work, but you'll have to reduce the maximum sequence length to 32. Once this model trains, add its path to the file `aliases.py` along with the key `gtr_msmarco__msl128__100epoch` and then run the following command to train the corrector:
 
 ```bash
-python run.py --per_device_train_batch_size 32 --per_device_eval_batch_size 32 --max_seq_length 128 --model_name_or_path t5-base --dataset_name msmarco --embedder_model_name gtr_base --num_repeat_tokens 16 --embedder_no_grad True --num_train_epochs 100 --max_eval_samples 500 --eval_steps 20000 --warmup_steps 10000 --bf16=1 --use_wandb=1 --use_frozen_embeddings_as_input True --experiment corrector --lr_scheduler_type constant_with_warmup --exp_group_name oct-gtr --learning_rate 0.001 --output_dir ./saves/gtr-corrector-1 --save_steps 2000 --corrector_model_alias gtr_msmarco__msl128__100epoch
+python run.py \
+  --per_device_train_batch_size 32 \
+  --per_device_eval_batch_size 32 \
+  --max_seq_length 128 \
+  --model_name_or_path t5-base \
+  --dataset_name msmarco \
+  --embedder_model_name gtr_base \
+  --num_repeat_tokens 16 \
+  --embedder_no_grad True \
+  --num_train_epochs 100 \
+  --max_eval_samples 500 \
+  --eval_steps 20000 \
+  --warmup_steps 10000 \
+  --bf16=1 \
+  --use_wandb=1 \
+  --use_frozen_embeddings_as_input True \
+  --experiment corrector \
+  --lr_scheduler_type constant_with_warmup \
+  --exp_group_name oct-gtr \
+  --learning_rate 0.001 \
+  --output_dir ./saves/gtr-corrector-1 \
+  --save_steps 2000 \
+  --corrector_model_alias gtr_msmarco__msl128__100epoch
 ```
 
 If using DDP, run the same command using `torchrun run.py` instead of `python run.py`. You can upload these models to the Hugging Face Hub using our script by running `python scripts/upload_model.py <model_alias> <model_hub_name>`.
@@ -301,7 +344,25 @@ This is the dataset of prompts used for training (referred to as "Two Million In
 
 Here is a sample command for training a language model inverter:
 ```bash
-python vec2text/run.py --per_device_train_batch_size 16 --per_device_eval_batch_size 16 --max_seq_length 128 --num_train_epochs 100 --max_eval_samples 1000 --eval_steps 25000 --warmup_steps 100000 --learning_rate 0.0002 --dataset_name one_million_instructions --model_name_or_path t5-base --use_wandb=0 --embedder_model_name gpt2 --experiment inversion_from_logits_emb --bf16=1 --embedder_torch_dtype float16 --lr_scheduler_type constant_with_warmup --use_frozen_embeddings_as_input 1 --mock_embedder 0
+python vec2text/run.py \
+  --per_device_train_batch_size 16 \
+  --per_device_eval_batch_size 16 \
+  --max_seq_length 128 \
+  --num_train_epochs 100 \
+  --max_eval_samples 1000 \
+  --eval_steps 25000 \
+  --warmup_steps 100000 \
+  --learning_rate 0.0002 \
+  --dataset_name one_million_instructions \
+  --model_name_or_path t5-base \
+  --use_wandb=0 \
+  --embedder_model_name gpt2 \
+  --experiment inversion_from_logits_emb \
+  --bf16=1 \
+  --embedder_torch_dtype float16 \
+  --lr_scheduler_type constant_with_warmup \
+  --use_frozen_embeddings_as_input 1 \
+  --mock_embedder 0
 ```
 
 #### Pre-trained models
