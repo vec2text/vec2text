@@ -1,6 +1,6 @@
 accelerate
 bert_score
-datasets
+datasets<4
 einops
 evaluate
 openai
