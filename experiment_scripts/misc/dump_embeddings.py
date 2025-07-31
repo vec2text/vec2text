@@ -27,9 +27,9 @@ from models import (
 )
 from tokenize_data import tokenize_function
 from utils import emb
+from vec2text.models.model_utils import device
 
 num_workers = len(os.sched_getaffinity(0))
-device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 
 def load_model_and_tokenizers(
