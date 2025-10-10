@@ -1,5 +1,7 @@
 __pycache__/
 
+.idea/
+
 slurm-*.out
 *cache/
 *.p
