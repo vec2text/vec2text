@@ -1,18 +1,14 @@
 # vec2text
 
-<img src="https://github.com/jxmorris12/vec2text-gif/blob/master/vec2text_v3.gif" width="500" />
-
 This library contains code for doing text embedding inversion. We can train various architectures that reconstruct text sequences from embeddings as well as run pre-trained models. This repository contains code for the papers "Text Embeddings Reveal (Almost) As Much As Text" and "Language Model Inversion".
 
-To get started, install this on PyPI:
-
-```bash
-pip install vec2text
-```
-
-[Link to Colab Demo](https://colab.research.google.com/drive/14RQFRF2It2Kb8gG3_YDhP_6qE0780L8h?usp=sharing)
 
 ### Development
+
+To get started, create development environment as:
+```bash
+conda env create -f dev_environment.yaml
+```
 
 If you're training a model you'll need to set up nltk:
 ```python
