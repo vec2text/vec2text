@@ -13,15 +13,15 @@ def main():
     model_args, data_args, training_args = parser.parse_args_into_dataclasses()
 
     # Model Arguments
-    model_args.max_seq_length = 128
-    model_args.model_name_or_path = ""
-    model_args.embedder_model_name = ""
+    model_args.max_seq_length = 77
+    model_args.model_name_or_path = "google/flan-t5-base" #changed
+    model_args.embedder_model_name = "openai/clip-vit-large-patch14" #changed
     model_args.num_repeat_tokens = 16
     model_args.embedder_no_grad = True
     model_args.use_frozen_embeddings_as_input = True
 
     # Data Arguments
-    data_args.dataset_name = ""
+    data_args.dataset_name = "msmarco" #changed
     data_args.max_eval_samples = 500
 
     # Training Arguments
@@ -36,7 +36,7 @@ def main():
     training_args.lr_scheduler_type = "constant_with_warmup"
     training_args.exp_group_name = ""
     training_args.learning_rate = 0.001
-    training_args.output_dir = ""  # ./saves/{model_name}
+    training_args.output_dir = "./saves/SDV1_4"  # ./saves/{model_name}
     training_args.save_steps = 2000
 
     if exp == "corrector":

@@ -250,6 +250,11 @@ def load_embedder_and_tokenizer(name: str, torch_dtype: str, **kwargs):
             "nomic-ai/nomic-embed-text-v1", trust_remote_code=True
         )
         tokenizer = model.tokenizer
+    elif "clip" in name.lower():
+        model = transformers.CLIPModel.from_pretrained(name)
+        tokenizer = transformers.CLIPTokenizer.from_pretrained(name)
+        model = model.text_model  # <-- use text encoder only
+        # return embedder, tokenizer
     else:
         print(f"WARNING: Trying to initialize from unknown embedder {name}")
         model = transformers.AutoModel.from_pretrained(name, **model_kwargs)
@@ -272,9 +277,14 @@ def load_encoder_decoder(
                 "device_map": "auto",
             }
         )
+    if "clip" in model_name.lower():
+        print(f"Loading CLIP model: {model_name}")
+        return transformers.CLIPModel.from_pretrained(model_name, **model_kwargs)
+    
     return transformers.AutoModelForSeq2SeqLM.from_pretrained(
         model_name, **model_kwargs
     )
+
 
 
 def load_tokenizer(name: str, max_length: int) -> transformers.PreTrainedTokenizer:
