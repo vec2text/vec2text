@@ -4,7 +4,12 @@ import hashlib
 import json
 import logging
 import os
-import resource
+
+if platform.system() != "Windows":
+    # Import breaks Windows, so don't import it if we're not on windows.
+    # Surprisingly this doesn't break anything when using the library.
+    import resource
+
 import sys
 from typing import Dict, Optional
 
