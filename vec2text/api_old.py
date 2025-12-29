@@ -5,7 +5,7 @@ import torch
 import transformers
 
 import vec2text
-from vec2text.models.model_utils import device 
+from vec2text.models.model_utils import device
 
 SUPPORTED_MODELS = ["text-embedding-ada-002", "gtr-base"]
 
@@ -23,17 +23,17 @@ def load_pretrained_corrector(embedder: str) -> vec2text.trainers.Corrector:
     if embedder == "text-embedding-ada-002":
         inversion_model = vec2text.models.InversionModel.from_pretrained(
             "jxm/vec2text__openai_ada002__msmarco__msl128__hypothesizer"
-        ).to(device)
+        )
         model = vec2text.models.CorrectorEncoderModel.from_pretrained(
             "jxm/vec2text__openai_ada002__msmarco__msl128__corrector"
-        ).to(device)
+        )
     elif embedder == "gtr-base":
         inversion_model = vec2text.models.InversionModel.from_pretrained(
             "jxm/gtr__nq__32"
-        ).to(device)
+        )
         model = vec2text.models.CorrectorEncoderModel.from_pretrained(
             "jxm/gtr__nq__32__correct"
-        ).to(device)
+        )
     else:
         raise NotImplementedError(f"embedder `{embedder}` not implemented")
 
@@ -82,11 +82,8 @@ def invert_embeddings(
     corrector: vec2text.trainers.Corrector,
     num_steps: int = None,
     sequence_beam_width: int = 0,
-    max_length: int = 128,
+    max_length: int = 128, #this is not sufficient to add functionality: corrector and hypothesizer also must be modified
 ) -> List[str]:
-    # Ensure embeddings are on the correct device
-    embeddings = embeddings.to(device)
-    
     corrector.inversion_trainer.model.eval()
     corrector.model.eval()
 
@@ -128,9 +125,6 @@ def invert_embeddings_and_return_hypotheses(
     num_steps: int = None,
     sequence_beam_width: int = 0,
 ) -> List[str]:
-    # Ensure embeddings are on the correct device
-    embeddings = embeddings.to(device)
-    
     corrector.inversion_trainer.model.eval()
     corrector.model.eval()
 
